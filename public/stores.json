@@ -1,260 +1,46 @@
 [
-  {
-    "id": "ebay",
-    "name": "eBay",
-    "adId": null,
-    "platform": "ebay"
-  },
-  {
-    "id": "2ndcharles",
-    "name": "2nd & Charles",
-    "adId": "6423982",
-    "platform": "cj"
-  },
-  {
-    "id": "airvape",
-    "name": "AirVape",
-    "adId": "5146556",
-    "platform": "cj"
-  },
-  {
-    "id": "birdfy",
-    "name": "Birdfy",
-    "adId": "7389113",
-    "platform": "cj"
-  },
-  {
-    "id": "booksamillion",
-    "name": "BooksAMillion.com",
-    "adId": "129899",
-    "platform": "cj"
-  },
-  {
-    "id": "corro",
-    "name": "Corro",
-    "adId": "7304564",
-    "platform": "cj"
-  },
-  {
-    "id": "designshop",
-    "name": "DesignShop",
-    "adId": "7310766",
-    "platform": "cj"
-  },
-  {
-    "id": "directdeals",
-    "name": "DirectDeals",
-    "adId": "6271057",
-    "platform": "cj"
-  },
-  {
-    "id": "durangoboots",
-    "name": "DurangoBoots.com",
-    "adId": "6284905",
-    "platform": "cj"
-  },
-  {
-    "id": "edenfantasys",
-    "name": "EdenFantasys.com",
-    "adId": "1880835",
-    "platform": "cj"
-  },
-  {
-    "id": "entirelypets",
-    "name": "EntirelyPets",
-    "adId": "1475632",
-    "platform": "cj"
-  },
-  {
-    "id": "fragranceshop",
-    "name": "FragranceShop.com",
-    "adId": "7287203",
-    "platform": "cj"
-  },
-  {
-    "id": "georgiaboot",
-    "name": "GeorgiaBoot.com",
-    "adId": "6284907",
-    "platform": "cj"
-  },
-  {
-    "id": "homery",
-    "name": "Homery",
-    "adId": "7423765",
-    "platform": "cj"
-  },
-  {
-    "id": "lightingnewyork",
-    "name": "Lighting New York",
-    "adId": "7345655",
-    "platform": "cj"
-  },
-  {
-    "id": "mms",
-    "name": "M&M's",
-    "adId": "2603623",
-    "platform": "cj"
-  },
-  {
-    "id": "melodysusie",
-    "name": "MelodySusie",
-    "adId": "5619253",
-    "platform": "cj"
-  },
-  {
-    "id": "mobilepixels",
-    "name": "Mobile Pixels",
-    "adId": "5725421",
-    "platform": "cj"
-  },
-  {
-    "id": "modloft",
-    "name": "Modloft",
-    "adId": "5921758",
-    "platform": "cj"
-  },
-  {
-    "id": "muckbootus",
-    "name": "Muck Boot US",
-    "adId": "5535808",
-    "platform": "cj"
-  },
-  {
-    "id": "perfumania",
-    "name": "Perfumania.com",
-    "adId": "904674",
-    "platform": "cj"
-  },
-  {
-    "id": "pinter",
-    "name": "Pinter",
-    "adId": "7268812",
-    "platform": "cj"
-  },
-  {
-    "id": "pittmandavis",
-    "name": "Pittman & Davis",
-    "adId": "5126239",
-    "platform": "cj"
-  },
-  {
-    "id": "powersystems",
-    "name": "Power Systems",
-    "adId": "3056145",
-    "platform": "cj"
-  },
-  {
-    "id": "roborock",
-    "name": "Roborock",
-    "adId": "6100283",
-    "platform": "cj"
-  },
-  {
-    "id": "rockyboots",
-    "name": "RockyBoots.com",
-    "adId": "6284903",
-    "platform": "cj"
-  },
-  {
-    "id": "roobi",
-    "name": "Roobi | Viante",
-    "adId": "7420130",
-    "platform": "cj"
-  },
-  {
-    "id": "rugsource",
-    "name": "Rug Source",
-    "adId": "5656292",
-    "platform": "cj"
-  },
-  {
-    "id": "sicotas",
-    "name": "Sicotas",
-    "adId": "7421130",
-    "platform": "cj"
-  },
-  {
-    "id": "singer",
-    "name": "SINGER Sewing Machines",
-    "adId": "7111284",
-    "platform": "cj"
-  },
-  {
-    "id": "skutchi",
-    "name": "Skutchi Designs",
-    "adId": "7052554",
-    "platform": "cj"
-  },
-  {
-    "id": "soccergarage",
-    "name": "SoccerGarage.com",
-    "adId": "2061630",
-    "platform": "cj"
-  },
-  {
-    "id": "sportsmanswarehouse",
-    "name": "Sportsman's Warehouse",
-    "adId": "4148179",
-    "platform": "cj"
-  },
-  {
-    "id": "sullenclothing",
-    "name": "Sullen Clothing",
-    "adId": "5775818",
-    "platform": "cj"
-  },
-  {
-    "id": "tinyland",
-    "name": "Tiny Land",
-    "adId": "7268655",
-    "platform": "cj"
-  },
-  {
-    "id": "vyjewelry",
-    "name": "VY Jewelry",
-    "adId": "7455697",
-    "platform": "cj"
-  },
-  {
-    "id": "willworkjewelry",
-    "name": "WillWork Jewelry",
-    "adId": "7211160",
-    "platform": "cj"
-  },
-  {
-    "id": "xtratuf",
-    "name": "Xtratuf",
-    "adId": "5535819",
-    "platform": "cj"
-  },
-  {
-    "id": "yarden",
-    "name": "Yarden",
-    "adId": "5262261",
-    "platform": "cj"
-  },
-  {
-    "id": "cpopowertools",
-    "name": "CPO Power Tools",
-    "adId": "50212",
-    "platform": "rakuten"
-  },
-  {
-    "id": "electronicsexpo",
-    "name": "Electronics Expo",
-    "adId": "53778",
-    "platform": "rakuten"
-  },
-  {
-    "id": "gabrielahearst",
-    "name": "Gabriela Hearst",
-    "adId": "50238",
-    "platform": "rakuten"
-  },
-  {
-    "id": "greenworkstools",
-    "name": "Greenworks Tools",
-    "adId": "53521",
-    "platform": "rakuten"
-  }
+    {"id": "2nd_charles", "name": "2nd & Charles", "platform": "cj", "adId": "6423982"},
+    {"id": "airvape", "name": "AirVape", "platform": "cj", "adId": "5146556"},
+    {"id": "birdfy", "name": "Birdfy", "platform": "cj", "adId": "7389113"},
+    {"id": "booksamillion", "name": "BOOKSAMILLION.COM", "platform": "cj", "adId": "129899"},
+    {"id": "corro", "name": "Corro", "platform": "cj", "adId": "7304564"},
+    {"id": "designshop", "name": "DesignShop", "platform": "cj", "adId": "7310766"},
+    {"id": "directdeals", "name": "DirectDeals", "platform": "cj", "adId": "6271057"},
+    {"id": "durangoboots", "name": "DurangoBoots.com", "platform": "cj", "adId": "6284905"},
+    {"id": "edenfantasys", "name": "EdenFantasys.com", "platform": "cj", "adId": "1880835"},
+    {"id": "entirelypets", "name": "EntirelyPets", "platform": "cj", "adId": "1475632"},
+    {"id": "fragranceshop", "name": "FragranceShop.com", "platform": "cj", "adId": "7287203"},
+    {"id": "georgiaboot", "name": "GeorgiaBoot.com", "platform": "cj", "adId": "6284907"},
+    {"id": "homery", "name": "Homery", "platform": "cj", "adId": "7423765"},
+    {"id": "lighting_new_york", "name": "Lighting New York", "platform": "cj", "adId": "7345655"},
+    {"id": "m_ms", "name": "M&M's", "platform": "cj", "adId": "2603623"},
+    {"id": "melodysusie", "name": "MelodySusie", "platform": "cj", "adId": "5619253"},
+    {"id": "mobile_pixels", "name": "Mobile Pixels", "platform": "cj", "adId": "5725421"},
+    {"id": "modloft", "name": "Modloft", "platform": "cj", "adId": "5921758"},
+    {"id": "muck_boot_us", "name": "Muck Boot US", "platform": "cj", "adId": "5535808"},
+    {"id": "perfumania", "name": "Perfumania.com", "platform": "cj", "adId": "904674"},
+    {"id": "pinter", "name": "Pinter - All-in-One Beer Making Machine", "platform": "cj", "adId": "7268812"},
+    {"id": "pittman_davis", "name": "Pittman & Davis", "platform": "cj", "adId": "5126239"},
+    {"id": "power_systems", "name": "Power Systems", "platform": "cj", "adId": "3056145"},
+    {"id": "roborock", "name": "Roborock Affiliate Program", "platform": "cj", "adId": "6100283"},
+    {"id": "rockyboots", "name": "RockyBoots.com", "platform": "cj", "adId": "6284903"},
+    {"id": "roobi_viante", "name": "Roobi | Viante", "platform": "cj", "adId": "7420130"},
+    {"id": "rug_source", "name": "Rug Source", "platform": "cj", "adId": "5656292"},
+    {"id": "sicotas", "name": "Sicotas", "platform": "cj", "adId": "7421130"},
+    {"id": "singer_sewing", "name": "SINGER Sewing Machines", "platform": "cj", "adId": "7111284"},
+    {"id": "skutchi_designs", "name": "Skutchi Designs", "platform": "cj", "adId": "7052554"},
+    {"id": "soccergarage", "name": "SoccerGarage.com", "platform": "cj", "adId": "2061630"},
+    {"id": "sportsmans_warehouse", "name": "Sportsman's Warehouse", "platform": "cj", "adId": "4148179"},
+    {"id": "sullen_clothing", "name": "Sullen Clothing", "platform": "cj", "adId": "5775818"},
+    {"id": "tiny_land", "name": "Tiny Land", "platform": "cj", "adId": "7268655"},
+    {"id": "vy_jewelry", "name": "VY Jewelry", "platform": "cj", "adId": "7455697"},
+    {"id": "willwork_jewelry", "name": "WillWork Jewelry", "platform": "cj", "adId": "7211160"},
+    {"id": "xtratuf", "name": "Xtratuf", "platform": "cj", "adId": "5535819"},
+    {"id": "yarden", "name": "Yarden", "platform": "cj", "adId": "5262261"},
+    {"id": "cpo_power_tools", "name": "CPO Power Tools", "platform": "rakuten", "adId": "50212"},
+    {"id": "electronics_expo", "name": "Electronics Expo", "platform": "rakuten", "adId": "53778"},
+    {"id": "gabriela_hearst", "name": "Gabriela Hearst", "platform": "rakuten", "adId": "50238"},
+    {"id": "greenworks_tools", "name": "Greenworks Tools", "platform": "rakuten", "adId": "53521"},
+    {"id": "vevor", "name": "Vevor", "platform": "rakuten", "adId": "53191"},
+    {"id": "ebay", "name": "eBay", "platform": "ebay", "adId": null}
 ]
