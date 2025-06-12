@@ -124,23 +124,29 @@ app.post('/search', async (req, res) => {
           'Accept': 'application/json'
         }
       });
-      console.log(`Rakuten Response for ${store}:`, response.data);
-      const items = Array.isArray(response.data.item) ? response.data.item : [];
+      console.log(`Rakuten Raw Response for ${store}:`, response.data);
+      const items = Array.isArray(response.data.item) ? response.data.item : (response.data.item ? [response.data.item] : []);
+      if (items.length === 0) {
+        console.error(`Rakuten No Items for ${store}:`, response.data);
+        results.push({ store: storeInfo.name, error: 'No items found' });
+        continue;
+      }
       const rakutenResults = items.map(item => ({
         store: storeInfo.name,
         name: item.productname || 'Unknown',
-        price: item.price ? `${item.price.currency} ${item.price['__value__'] || item.price}` : 'N/A',
+        price: item.price && item.price.currency && item.price['__value__'] ? `${item.price.currency} ${item.price['__value__']}` : 'N/A',
         url: item.linkurl || '',
         image: item.imageurl || '',
         shipping: 'N/A'
       }));
-      if (rakutenResults.length === 0) {
-        results.push({ store: storeInfo.name, error: 'No items found' });
-      } else {
-        results.push(...rakutenResults);
-      }
+      results.push(...rakutenResults);
     } catch (error) {
-      console.error(`Rakuten Error for ${store}:`, error.response?.data || error.message);
+      console.error(`Rakuten Error for ${store}:`, {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers
+      });
       results.push({ store: storeInfo.name, error: error.response?.data?.error_description || 'Search failed' });
     }
   }
