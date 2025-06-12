@@ -112,35 +112,28 @@ app.post('/search', async (req, res) => {
     }
     try {
       console.log(`Rakuten API call for ${store}: token=${rakutenToken.slice(0, 10)}..., sid=${rakutenSid}, mid=${storeInfo.adId}`);
-      const response = await axios.get('https://api.rakutenadvertising.com/productsearch/1.0', {
+      const response = await axios.get('https://api.linksynergy.com/productsearch/1.0', {
         params: {
           token: rakutenToken,
           sid: rakutenSid,
           mid: storeInfo.adId,
           keyword: query,
-          maxResults: 5
+          max: 5
         },
         headers: {
-          'Accept': 'application/xml'
+          'Accept': 'application/json'
         }
       });
       console.log(`Rakuten Response for ${store}:`, response.data);
-      // Parse XML response (assuming XML format per Rakuten API)
-      const items = response.data.match(/<item>[\s\S]*?<\/item>/g) || [];
-      const rakutenResults = items.map(item => {
-        const productname = item.match(/<productname>(.*?)<\/productname>/)?.[1] || 'Unknown';
-        const price = item.match(/<price currency="(\w+)">([\d.]+)<\/price>/);
-        const linkurl = item.match(/<linkurl>(.*?)<\/linkurl>/)?.[1] || '';
-        const imageurl = item.match(/<imageurl>(.*?)<\/imageurl>/)?.[1] || '';
-        return {
-          store: storeInfo.name,
-          name: productname,
-          price: price ? `${price[1]} ${price[2]}` : 'N/A',
-          url: linkurl,
-          image: imageurl,
-          shipping: 'N/A'
-        };
-      });
+      const items = Array.isArray(response.data.item) ? response.data.item : [];
+      const rakutenResults = items.map(item => ({
+        store: storeInfo.name,
+        name: item.productname || 'Unknown',
+        price: item.price ? `${item.price.currency} ${item.price['__value__'] || item.price}` : 'N/A',
+        url: item.linkurl || '',
+        image: item.imageurl || '',
+        shipping: 'N/A'
+      }));
       if (rakutenResults.length === 0) {
         results.push({ store: storeInfo.name, error: 'No items found' });
       } else {
