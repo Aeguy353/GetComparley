@@ -42,5 +42,5 @@
     {"id": "gabriela_hearst", "name": "Gabriela Hearst", "platform": "rakuten", "adId": "50238"},
     {"id": "greenworks_tools", "name": "Greenworks Tools", "platform": "rakuten", "adId": "53521"},
     {"id": "vevor", "name": "Vevor", "platform": "rakuten", "adId": "53191"},
-    {"id": "ebay", "name": "eBay", "platform": "ebay", "adId": null}
+    {"id": "ebay", "name": "eBay", "platform": "ebay", "adId": ""}
 ]
