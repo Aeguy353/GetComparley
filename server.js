@@ -33,6 +33,10 @@ app.post('/search', async (req, res) => {
   const rakutenAppId = process.env.RAKUTEN_APPLICATION_ID;
   const rakutenAffId = process.env.RAKUTEN_AFFILIATE_ID;
 
+  // Log Rakuten credentials for debugging
+  console.log('RAKUTEN_APPLICATION_ID:', rakutenAppId ? 'Set' : 'Missing');
+  console.log('RAKUTEN_AFFILIATE_ID:', rakutenAffId ? 'Set' : 'Missing');
+
   // Load stores.json to get adIds
   const storesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'public', 'stores.json')));
 
@@ -47,7 +51,7 @@ app.post('/search', async (req, res) => {
       const response = await axios.post(
         'https://ads.api.cj.com/query',
         {
-          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } link } } }`
+          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } link images { url } shipping { cost amount currency } } } }`
         },
         {
           headers: {
@@ -60,7 +64,9 @@ app.post('/search', async (req, res) => {
         store: storeInfo.name,
         name: item.title,
         price: `${item.price.currency} ${item.price.amount}`,
-        url: `${item.link}&pid=${cjPid}`
+        url: `${item.link}&pid=${cjPid}`,
+        image: item.images?.[0]?.url || '',
+        shipping: item.shipping ? `${item.shipping.currency} ${item.shipping.amount || item.shipping.cost || 'N/A'}` : 'N/A'
       }));
       results.push(...cjResults);
     } catch (error) {
@@ -87,7 +93,9 @@ app.post('/search', async (req, res) => {
         store: 'eBay',
         name: item.title[0],
         price: `USD ${item.sellingStatus[0].currentPrice[0].__value__}`,
-        url: item.viewItemURL[0]
+        url: item.viewItemURL[0],
+        image: item.galleryURL?.[0] || '',
+        shipping: item.shippingInfo?.[0]?.shippingServiceCost?.[0]?.__value__ ? `USD ${item.shippingInfo[0].shippingServiceCost[0].__value__}` : 'N/A'
       }));
       results.push(...ebayResults);
     } catch (error) {
@@ -117,7 +125,9 @@ app.post('/search', async (req, res) => {
         store: storeInfo.name,
         name: item.productname,
         price: `${item.price.currency} ${item.price['__value__'] || item.price}`,
-        url: item.linkurl
+        url: item.linkurl,
+        image: item.imageurl || '',
+        shipping: 'N/A' // Rakuten API does not provide shipping cost
       }));
       results.push(...rakutenResults);
     } catch (error) {
