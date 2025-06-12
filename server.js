@@ -32,7 +32,6 @@ app.post('/search', async (req, res) => {
   const ebayClientId = process.env.EBAY_CLIENT_ID;
   const rakutenAppId = process.env.RAKUTEN_APPLICATION_ID;
   const rakutenAffId = process.env.RAKUTEN_AFFILIATE_ID;
-  const rakutenAccessToken = process.env.RAKUTEN_ACCESS_TOKEN;
 
   // Load stores.json to get adIds
   const storesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'public', 'stores.json')));
@@ -112,8 +111,7 @@ app.post('/search', async (req, res) => {
           mid: storeInfo.adId,
           keyword: query,
           max: 5
-        },
-        headers: rakutenAccessToken ? { 'Authorization': `Bearer ${rakutenAccessToken}` } : {}
+        }
       });
       const rakutenResults = response.data.item.map(item => ({
         store: storeInfo.name,
@@ -139,5 +137,4 @@ app.listen(port, () => {
   console.log('EBAY_CLIENT_ID:', process.env.EBAY_CLIENT_ID ? 'Set' : 'Missing');
   console.log('RAKUTEN_APPLICATION_ID:', process.env.RAKUTEN_APPLICATION_ID ? 'Set' : 'Missing');
   console.log('RAKUTEN_AFFILIATE_ID:', process.env.RAKUTEN_AFFILIATE_ID ? 'Set' : 'Missing');
-  console.log('RAKUTEN_ACCESS_TOKEN:', process.env.RAKUTEN_ACCESS_TOKEN ? 'Set' : 'Missing');
 });
