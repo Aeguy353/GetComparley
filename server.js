@@ -118,26 +118,34 @@ app.post('/search', async (req, res) => {
           sid: rakutenSid,
           mid: storeInfo.adId,
           keyword: query,
-          max: 5
+          maxResults: 5
         },
         headers: {
-          'Accept': 'application/json'
+          'Accept': 'application/xml'
         }
       });
-      if (!response.data.item) {
-        console.error(`Rakuten No Items for ${store}:`, response.data);
+      console.log(`Rakuten Response for ${store}:`, response.data);
+      // Parse XML response (assuming XML format per Rakuten API)
+      const items = response.data.match(/<item>[\s\S]*?<\/item>/g) || [];
+      const rakutenResults = items.map(item => {
+        const productname = item.match(/<productname>(.*?)<\/productname>/)?.[1] || 'Unknown';
+        const price = item.match(/<price currency="(\w+)">([\d.]+)<\/price>/);
+        const linkurl = item.match(/<linkurl>(.*?)<\/linkurl>/)?.[1] || '';
+        const imageurl = item.match(/<imageurl>(.*?)<\/imageurl>/)?.[1] || '';
+        return {
+          store: storeInfo.name,
+          name: productname,
+          price: price ? `${price[1]} ${price[2]}` : 'N/A',
+          url: linkurl,
+          image: imageurl,
+          shipping: 'N/A'
+        };
+      });
+      if (rakutenResults.length === 0) {
         results.push({ store: storeInfo.name, error: 'No items found' });
-        continue;
+      } else {
+        results.push(...rakutenResults);
       }
-      const rakutenResults = response.data.item.map(item => ({
-        store: storeInfo.name,
-        name: item.productname,
-        price: `${item.price.currency} ${item.price['__value__'] || item.price}`,
-        url: item.linkurl,
-        image: item.imageurl || '',
-        shipping: 'N/A'
-      }));
-      results.push(...rakutenResults);
     } catch (error) {
       console.error(`Rakuten Error for ${store}:`, error.response?.data || error.message);
       results.push({ store: storeInfo.name, error: error.response?.data?.error_description || 'Search failed' });
