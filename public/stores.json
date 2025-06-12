@@ -234,21 +234,27 @@
     "platform": "cj"
   },
   {
-    "id": "tabio",
-    "name": "Tabio",
-    "adId": "YOUR_TABIO_ADID",
+    "id": "cpopowertools",
+    "name": "CPO Power Tools",
+    "adId": "50212",
     "platform": "rakuten"
   },
   {
-    "id": "gogocurry",
-    "name": "Go Go Curry",
-    "adId": "YOUR_GOGOCURRY_ADID",
+    "id": "electronicsexpo",
+    "name": "Electronics Expo",
+    "adId": "53778",
     "platform": "rakuten"
   },
   {
-    "id": "basefood",
-    "name": "BASE FOOD",
-    "adId": "YOUR_BASEFOOD_ADID",
+    "id": "gabrielahearst",
+    "name": "Gabriela Hearst",
+    "adId": "50238",
+    "platform": "rakuten"
+  },
+  {
+    "id": "greenworkstools",
+    "name": "Greenworks Tools",
+    "adId": "53521",
     "platform": "rakuten"
   }
 ]
