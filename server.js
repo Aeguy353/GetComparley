@@ -47,7 +47,7 @@ app.post('/search', async (req, res) => {
       const response = await axios.post(
         'https://ads.api.cj.com/query',
         {
-          query: `query { shoppingProducts(companyId: "${cjCompanyId}", advertiserIds: ["${storeInfo.adId}"], keywords: ["${query}"], limit: 5) { resultList { id, name, price, currency, url } } }`
+          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } ad { url } } } }`
         },
         {
           headers: {
@@ -58,14 +58,14 @@ app.post('/search', async (req, res) => {
       );
       const cjResults = response.data.data.shoppingProducts.resultList.map(item => ({
         store: storeInfo.name,
-        name: item.name,
-        price: `${item.currency} ${item.price}`,
-        url: `${item.url}&pid=${cjPid}`
+        name: item.title,
+        price: `${item.price.currency} ${item.price.amount}`,
+        url: `${item.ad.url}&pid=${cjPid}`
       }));
       results.push(...cjResults);
     } catch (error) {
       console.error(`CJ Error for ${store}:`, error.response?.data || error.message);
-      results.push({ store: storeInfo.name, error: 'Search failed' });
+      results.push({ store: storeInfo.name, error: error.response?.data?.errors?.map(e => e.message).join(', ') || 'Search failed' });
     }
   }
 
@@ -92,7 +92,7 @@ app.post('/search', async (req, res) => {
       results.push(...ebayResults);
     } catch (error) {
       console.error('eBay Error:', error.response?.data || error.message);
-      results.push({ store: 'eBay', error: 'Search failed' });
+      results.push({ store: 'eBay', error: error.response?.data?.errorMessage?.[0]?.error?.[0]?.message || 'Search failed' });
     }
   }
 
@@ -122,7 +122,7 @@ app.post('/search', async (req, res) => {
       results.push(...rakutenResults);
     } catch (error) {
       console.error(`Rakuten Error for ${store}:`, error.response?.data || error.message);
-      results.push({ store: storeInfo.name, error: 'Search failed' });
+      results.push({ store: storeInfo.name, error: error.response?.data?.error_description || 'Search failed' });
     }
   }
 
