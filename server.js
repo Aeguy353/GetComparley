@@ -47,7 +47,7 @@ app.post('/search', async (req, res) => {
       const response = await axios.post(
         'https://ads.api.cj.com/query',
         {
-          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } link { url } } } }`
+          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } link } } }`
         },
         {
           headers: {
@@ -60,7 +60,7 @@ app.post('/search', async (req, res) => {
         store: storeInfo.name,
         name: item.title,
         price: `${item.price.currency} ${item.price.amount}`,
-        url: `${item.link.url}&pid=${cjPid}`
+        url: `${item.link}&pid=${cjPid}`
       }));
       results.push(...cjResults);
     } catch (error) {
