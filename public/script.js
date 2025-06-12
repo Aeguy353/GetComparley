@@ -1,66 +1,42 @@
-async function loadStores() {
-  try {
-    const response = await fetch('/stores.json');
-    const stores = await response.json();
-    const storesList = document.getElementById('storesList');
-    stores.forEach(store => {
-      const label = document.createElement('label');
-      label.innerHTML = `<input type="checkbox" value="${store.id}"> ${store.name}`;
-      storesList.appendChild(label);
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.store-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
     });
-  } catch (error) {
-    console.error('Error loading stores:', error);
-    document.getElementById('storesList').innerHTML = '<p>Error loading stores.</p>';
-  }
+});
+function search() {
+    const query = document.getElementById('searchInput').value;
+    const selectedStores = Array.from(document.querySelectorAll('.store-checkbox:checked')).map(cb => cb.value);
+    fetch('/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, stores: selectedStores })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = '';
+        if (data.items.length === 0) {
+            resultsDiv.innerHTML = '<p>No results found.</p>';
+            return;
+        }
+        data.items.forEach(item => {
+            if (item.error) {
+                resultsDiv.innerHTML += `<p>Error for ${item.store}: ${item.error}</p>`;
+                return;
+            }
+            resultsDiv.innerHTML += `
+                <div>
+                    <h3>${item.name}</h3>
+                    <p>Store: ${item.store}</p>
+                    <p>Price: ${item.price}</p>
+                    <p>Shipping: ${item.shipping}</p>
+                    <a href="${item.url}" target="_blank">Buy Now</a>
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 100px;">` : ''}
+                </div>
+            `;
+        });
+    })
+    .catch(error => {
+        document.getElementById('results').innerHTML = `<p>Error: ${error.message}</p>`;
+    });
 }
-
-async function search() {
-  const query = document.getElementById('searchInput').value.trim();
-  const stores = Array.from(document.querySelectorAll('.stores input:checked')).map(input => input.value);
-  
-  if (!query || stores.length === 0) {
-    alert('Please enter a search term and select at least one store.');
-    return;
-  }
-
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = 'Loading...';
-
-  try {
-    const response = await fetch('/search', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, stores })
-    });
-    const data = await response.json();
-
-    resultsDiv.innerHTML = '';
-    if (data.items.length === 0) {
-      resultsDiv.innerHTML = '<p>No results found.</p>';
-      return;
-    }
-
-    data.items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'result-item';
-      if (item.error) {
-        div.innerHTML = `<p>${item.error}</p>`;
-      } else {
-        div.innerHTML = `
-          ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 100px; max-height: 100px; margin-right: 10px;" />` : ''}
-          <div>
-            <p><strong>${item.store}</strong>: ${item.name}</p>
-            <p>Price: ${item.price}</p>
-            <p>Shipping: ${item.shipping}</p>
-            <a href="${item.url}" target="_blank">View Product</a>
-          </div>
-        `;
-      }
-      resultsDiv.appendChild(div);
-    });
-  } catch (error) {
-    resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
-  }
-}
-
-window.onload = loadStores;
