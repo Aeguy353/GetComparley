@@ -33,11 +33,9 @@ app.post('/search', async (req, res) => {
   const rakutenToken = process.env.Rakuten_Token;
   const rakutenSid = process.env.Rakuten_SID;
 
-  // Log Rakuten credentials for debugging
   console.log('Rakuten_Token:', rakutenToken ? 'Set' : 'Missing');
   console.log('Rakuten_SID:', rakutenSid ? 'Set' : 'Missing');
 
-  // Load stores.json to get adIds
   const storesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'public', 'stores.json')));
 
   // CJ Search
@@ -108,20 +106,29 @@ app.post('/search', async (req, res) => {
   for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'rakuten'))) {
     const storeInfo = storesData.find(s => s.id === store);
     if (!storeInfo || !storeInfo.adId || !rakutenToken || !rakutenSid) {
+      console.error(`Rakuten Missing Data for ${store}:`, { adId: storeInfo?.adId, token: !!rakutenToken, sid: !!rakutenSid });
       results.push({ store: storeInfo?.name || store, error: 'Missing Rakuten credentials or adId' });
       continue;
     }
     try {
       console.log(`Rakuten API call for ${store}: token=${rakutenToken.slice(0, 10)}..., sid=${rakutenSid}, mid=${storeInfo.adId}`);
-      const response = await axios.get('https://api.linksynergy.com/productsearch/1.0', {
+      const response = await axios.get('https://api.rakutenadvertising.com/productsearch/1.0', {
         params: {
           token: rakutenToken,
           sid: rakutenSid,
           mid: storeInfo.adId,
           keyword: query,
           max: 5
+        },
+        headers: {
+          'Accept': 'application/json'
         }
       });
+      if (!response.data.item) {
+        console.error(`Rakuten No Items for ${store}:`, response.data);
+        results.push({ store: storeInfo.name, error: 'No items found' });
+        continue;
+      }
       const rakutenResults = response.data.item.map(item => ({
         store: storeInfo.name,
         name: item.productname,
