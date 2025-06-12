@@ -30,12 +30,14 @@ app.post('/search', async (req, res) => {
   const cjCompanyId = process.env.CJ_COMPANY_ID;
   const cjPid = process.env.CJ_PID;
   const ebayClientId = process.env.EBAY_CLIENT_ID;
+  const rakutenAppId = process.env.RAKUTEN_APPLICATION_ID;
+  const rakutenAffId = process.env.RAKUTEN_AFFILIATE_ID;
 
   // Load stores.json to get adIds
   const storesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'public', 'stores.json')));
 
-  // CJ Search for CJ-affiliated stores
-  for (const store of stores.filter(s => s !== 'ebay')) {
+  // CJ Search
+  for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'cj'))) {
     const storeInfo = storesData.find(s => s.id === store);
     if (!storeInfo || !storeInfo.adId || !cjToken || !cjCompanyId || !cjPid) {
       results.push({ store: storeInfo?.name || store, error: 'Missing CJ credentials or adId' });
@@ -94,6 +96,36 @@ app.post('/search', async (req, res) => {
     }
   }
 
+  // Rakuten Search
+  for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'rakuten'))) {
+    const storeInfo = storesData.find(s => s.id === store);
+    if (!storeInfo || !storeInfo.adId || !rakutenAppId || !rakutenAffId) {
+      results.push({ store: storeInfo?.name || store, error: 'Missing Rakuten credentials or adId' });
+      continue;
+    }
+    try {
+      const response = await axios.get('https://api.linksynergy.com/productsearch/1.0', {
+        params: {
+          token: rakutenAppId,
+          sid: rakutenAffId,
+          mid: storeInfo.adId,
+          keyword: query,
+          max: 5
+        }
+      });
+      const rakutenResults = response.data.item.map(item => ({
+        store: storeInfo.name,
+        name: item.productname,
+        price: `${item.price.currency} ${item.price['__value__'] || item.price}`,
+        url: item.linkurl
+      }));
+      results.push(...rakutenResults);
+    } catch (error) {
+      console.error(`Rakuten Error for ${store}:`, error.response?.data || error.message);
+      results.push({ store: storeInfo.name, error: 'Search failed' });
+    }
+  }
+
   res.json({ items: results });
 });
 
@@ -103,4 +135,6 @@ app.listen(port, () => {
   console.log('CJ_COMPANY_ID:', process.env.CJ_COMPANY_ID ? 'Set' : 'Missing');
   console.log('CJ_PID:', process.env.CJ_PID ? 'Set' : 'Missing');
   console.log('EBAY_CLIENT_ID:', process.env.EBAY_CLIENT_ID ? 'Set' : 'Missing');
+  console.log('RAKUTEN_APPLICATION_ID:', process.env.RAKUTEN_APPLICATION_ID ? 'Set' : 'Missing');
+  console.log('RAKUTEN_AFFILIATE_ID:', process.env.RAKUTEN_AFFILIATE_ID ? 'Set' : 'Missing');
 });
