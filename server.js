@@ -42,7 +42,7 @@ app.post('/search', async (req, res) => {
 
   // CJ Search
   for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'cj'))) {
-    const storeInfo = storesData.find(s => s.id === s);
+    const storeInfo = storesData.find(s => s.id === store);
     if (!storeInfo || !storeInfo.adId || !cjToken || !cjCompanyId || !cjPid) {
       results.push({ store: storeInfo?.name || store, error: 'Missing CJ credentials or adId' });
       continue;
@@ -108,12 +108,11 @@ app.post('/search', async (req, res) => {
   for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'rakuten'))) {
     const storeInfo = storesData.find(s => s.id === store);
     if (!storeInfo || !storeInfo.adId || !rakutenToken || !rakutenSid) {
-      console.log(`Rakuten Skip for ${store}: Missing credentials or adId`);
       results.push({ store: storeInfo?.name || store, error: 'Missing Rakuten credentials or adId' });
       continue;
     }
     try {
-      console.log(`Rakuten API call: store=${store}, mid=${storeInfo.adId}, query=${query}`);
+      console.log(`Rakuten API call for ${store}: token=${rakutenToken.slice(0, 10)}..., sid=${rakutenSid}, mid=${storeInfo.adId}`);
       const response = await axios.get('https://api.linksynergy.com/productsearch/1.0', {
         params: {
           token: rakutenToken,
@@ -121,11 +120,9 @@ app.post('/search', async (req, res) => {
           mid: storeInfo.adId,
           keyword: query,
           max: 5
-        },
-        headers: { 'Accept': 'application/json' }
+        }
       });
-      console.log(`Rakuten Response for ${store}:`, JSON.stringify(response.data, null, 2));
-      const rakutenResults = (response.data.item || []).map(item => ({
+      const rakutenResults = response.data.item.map(item => ({
         store: storeInfo.name,
         name: item.productname,
         price: `${item.price.currency} ${item.price['__value__'] || item.price}`,
@@ -136,7 +133,7 @@ app.post('/search', async (req, res) => {
       results.push(...rakutenResults);
     } catch (error) {
       console.error(`Rakuten Error for ${store}:`, error.response?.data || error.message);
-      results.push({ store: storeInfo.name, error: error.response?.data?.error_description || error.message || 'Search failed' });
+      results.push({ store: storeInfo.name, error: error.response?.data?.error_description || 'Search failed' });
     }
   }
 
