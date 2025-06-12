@@ -46,7 +46,15 @@ async function search() {
       if (item.error) {
         div.innerHTML = `<p>${item.error}</p>`;
       } else {
-        div.innerHTML = `<p><strong>${item.store}</strong>: ${item.name}</p><p>Price: ${item.price}</p><a href="${item.url}" target="_blank">View Product</a>`;
+        div.innerHTML = `
+          ${item.image ? `<img src="${item.image}" alt="${item.name}" style="max-width: 100px; max-height: 100px; margin-right: 10px;" />` : ''}
+          <div>
+            <p><strong>${item.store}</strong>: ${item.name}</p>
+            <p>Price: ${item.price}</p>
+            <p>Shipping: ${item.shipping}</p>
+            <a href="${item.url}" target="_blank">View Product</a>
+          </div>
+        `;
       }
       resultsDiv.appendChild(div);
     });
