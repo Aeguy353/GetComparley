@@ -5,7 +5,7 @@ async function loadStores() {
     const storesList = document.getElementById('storesList');
     stores.forEach(store => {
       const label = document.createElement('label');
-      label.innerHTML = `<input type="checkbox" value="${store.id}" checked> ${store.name}`;
+      label.innerHTML = `<input type="checkbox" value="${store.id}"> ${store.name}`;
       storesList.appendChild(label);
     });
   } catch (error) {
@@ -44,7 +44,7 @@ async function search() {
       const div = document.createElement('div');
       div.className = 'result-item';
       if (item.error) {
-        div.innerHTML = `<p>Error from ${item.store}: ${item.error}</p>`;
+        div.innerHTML = `<p>${item.error}</p>`;
       } else {
         div.innerHTML = `<p><strong>${item.store}</strong>: ${item.name}</p><p>Price: ${item.price}</p><a href="${item.url}" target="_blank">View Product</a>`;
       }
