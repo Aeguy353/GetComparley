@@ -114,13 +114,13 @@ app.post('/search', async (req, res) => {
       console.log(`Rakuten API call for ${store}: token=${rakutenToken.slice(0, 10)}..., sid=${rakutenSid}, mid=${storeInfo.adId}`);
       const response = await axios.get('https://api.linksynergy.com/productsearch/1.0', {
         params: {
-          token: rakutenToken,
           sid: rakutenSid,
           mid: storeInfo.adId,
           keyword: query,
           max: 5
         },
         headers: {
+          'Authorization': `Bearer ${rakutenToken}`,
           'Accept': 'application/json'
         }
       });
