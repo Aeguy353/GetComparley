@@ -37,6 +37,10 @@ button:hover {
     text-align: center;
     padding: 10px;
 }
+.checkboxes label {
+    display: block;
+    margin: 5px 0;
+}
 #results {
     flex: 1;
     padding: 20px;
