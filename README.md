@@ -11,21 +11,8 @@ CJ_TOKEN=OAB5IwQ2dINv0fkwDKgzgRJUzQ
 CJ_COMPANY_ID=7568913
 CJ_PID=101450363
 EBAY_CLIENT_ID=JeffreyW-Comparle-PRD-8f018073b-d1a5c9df
-RAKUTEN_APPLICATION_ID=your-rakuten-app-id
-RAKUTEN_AFFILIATE_ID=your-rakuten-affiliate-id
-
-
-Update stores.json:
-
-Replace Rakuten adIds in public/stores.json with real Advertiser IDs from Rakuten’s affiliate dashboard.
-Example:{
-  "id": "tabio",
-  "name": "Tabio",
-  "adId": "123456",
-  "platform": "rakuten"
-}
-
-
+RAKUTEN_APPLICATION_ID=de7354bd89fd2d94d0c786ac975aaa204642f5afd93f5cc40d16948426269a84
+RAKUTEN_AFFILIATE_ID=Kay*nyAx*tw
 
 
 Run Locally:
@@ -36,7 +23,7 @@ Visit http://localhost:3000.
 Deploy on Render:
 
 Connect to GitHub repo.
-Set environment variables in Render.
+Set environment variables in Render as in .env.
 Use Node.js runtime, start command: npm start.
 
 
