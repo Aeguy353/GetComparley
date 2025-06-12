@@ -31,11 +31,11 @@ app.post('/search', async (req, res) => {
   const cjPid = process.env.CJ_PID;
   const ebayClientId = process.env.EBAY_CLIENT_ID;
   const rakutenAppId = process.env.RAKUTEN_APPLICATION_ID;
-  const rakutenSid = process.env.RAKUTEN_SID;
+  const rakutenAffId = process.env.RAKUTEN_AFFILIATE_ID;
 
   // Log Rakuten credentials for debugging
   console.log('RAKUTEN_APPLICATION_ID:', rakutenAppId ? 'Set' : 'Missing');
-  console.log('RAKUTEN_SID:', rakutenSid ? 'Set' : 'Missing');
+  console.log('RAKUTEN_AFFILIATE_ID:', rakutenAffId ? 'Set' : 'Missing');
 
   // Load stores.json to get adIds
   const storesData = JSON.parse(fs.readFileSync(path.join(__dirname, 'public', 'stores.json')));
@@ -51,7 +51,7 @@ app.post('/search', async (req, res) => {
       const response = await axios.post(
         'https://ads.api.cj.com/query',
         {
-          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } link images { url } shipping { cost amount currency } } } }`
+          query: `query { shoppingProducts(companyId: "${cjCompanyId}", keywords: ["${query}"], limit: 5) { resultList { id title price { amount currency } link imageLink } } }`
         },
         {
           headers: {
@@ -65,8 +65,8 @@ app.post('/search', async (req, res) => {
         name: item.title,
         price: `${item.price.currency} ${item.price.amount}`,
         url: `${item.link}&pid=${cjPid}`,
-        image: item.images?.[0]?.url || '',
-        shipping: item.shipping ? `${item.shipping.currency} ${item.shipping.amount || item.shipping.cost || 'N/A'}` : 'N/A'
+        image: item.imageLink || '',
+        shipping: 'N/A' // Shipping not available in CJ schema
       }));
       results.push(...cjResults);
     } catch (error) {
@@ -107,7 +107,7 @@ app.post('/search', async (req, res) => {
   // Rakuten Search
   for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'rakuten'))) {
     const storeInfo = storesData.find(s => s.id === store);
-    if (!storeInfo || !storeInfo.adId || !rakutenAppId || !rakutenSid) {
+    if (!storeInfo || !storeInfo.adId || !rakutenAppId || !rakutenAffId) {
       results.push({ store: storeInfo?.name || store, error: 'Missing Rakuten credentials or adId' });
       continue;
     }
@@ -115,7 +115,7 @@ app.post('/search', async (req, res) => {
       const response = await axios.get('https://api.linksynergy.com/productsearch/1.0', {
         params: {
           token: rakutenAppId,
-          sid: rakutenSid,
+          sid: rakutenAffId,
           mid: storeInfo.adId,
           keyword: query,
           max: 5
@@ -146,5 +146,5 @@ app.listen(port, () => {
   console.log('CJ_PID:', process.env.CJ_PID ? 'Set' : 'Missing');
   console.log('EBAY_CLIENT_ID:', process.env.EBAY_CLIENT_ID ? 'Set' : 'Missing');
   console.log('RAKUTEN_APPLICATION_ID:', process.env.RAKUTEN_APPLICATION_ID ? 'Set' : 'Missing');
-  console.log('RAKUTEN_SID:', process.env.RAKUTEN_SID ? 'Set' : 'Missing');
+  console.log('RAKUTEN_AFFILIATE_ID:', process.env.RAKUTEN_AFFILIATE_ID ? 'Set' : 'Missing');
 });
