@@ -33,6 +33,8 @@ app.post('/search', async (req, res) => {
   const rakutenToken = process.env.Rakuten_Token;
   const rakutenSid = process.env.Rakuten_SID;
 
+  console.log('CJ_TOKEN:', cjToken ? 'Set' : 'Missing');
+  console.log('CJ_COMPANY_ID:', cjCompanyId ? 'Set' : 'Missing');
   console.log('Rakuten_Token:', rakutenToken ? 'Set' : 'Missing');
   console.log('Rakuten_SID:', rakutenSid ? 'Set' : 'Missing');
 
@@ -42,10 +44,12 @@ app.post('/search', async (req, res) => {
   for (const store of stores.filter(s => storesData.find(si => si.id === s && si.platform === 'cj'))) {
     const storeInfo = storesData.find(s => s.id === store);
     if (!storeInfo || !storeInfo.adId || !cjToken || !cjCompanyId || !cjPid) {
+      console.error(`CJ Missing Data for ${store}:`, { adId: storeInfo?.adId, token: !!cjToken, companyId: !!cjCompanyId, pid: !!cjPid });
       results.push({ store: storeInfo?.name || store, error: 'Missing CJ credentials or adId' });
       continue;
     }
     try {
+      console.log(`CJ API call for ${store}: companyId=${cjCompanyId}, adId=${storeInfo.adId}`);
       const response = await axios.post(
         'https://ads.api.cj.com/query',
         {
@@ -58,6 +62,7 @@ app.post('/search', async (req, res) => {
           }
         }
       );
+      console.log(`CJ Response for ${store}:`, response.data);
       const cjResults = response.data.data.shoppingProducts.resultList.map(item => ({
         store: storeInfo.name,
         name: item.title,
@@ -68,8 +73,13 @@ app.post('/search', async (req, res) => {
       }));
       results.push(...cjResults);
     } catch (error) {
-      console.error(`CJ Error for ${store}:`, error.response?.data || error.message);
-      results.push({ store: storeInfo.name, error: error.response?.data?.errors?.map(e => e.message).join(', ') || 'Search failed' });
+      console.error(`CJ Error for ${store}:`, {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers
+      });
+      results.push({ store: storeInfo.name, error: error.response?.data?.errors?.map(e => e.message).join(', ') || error.message });
     }
   }
 
